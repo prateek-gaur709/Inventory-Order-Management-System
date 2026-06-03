@@ -14,9 +14,9 @@ A simplified full-stack Inventory & Order Management System for managing **produ
 
 | Item | Link |
 |------|------|
-| GitHub repository | _\<add after push>_ |
+| GitHub repository | https://github.com/prateek-gaur709/Inventory-Order-Management-System |
 | Backend Docker Hub image | https://hub.docker.com/r/prateekgaur9090/inventory-oms-backend |
-| Frontend hosted URL (Vercel) | _\<add after deploy>_ |
+| Frontend hosted URL (Vercel) | https://inventory-order-management-system-ashen-zeta.vercel.app |
 | Backend API hosted URL (Render) | https://inventory-oms-backend-latest.onrender.com — Swagger at [`/docs`](https://inventory-oms-backend-latest.onrender.com/docs) |
 
 ---
