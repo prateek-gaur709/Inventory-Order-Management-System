@@ -1,4 +1,5 @@
 """Business logic for products."""
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.core.errors import ConflictError, NotFoundError
@@ -40,4 +41,11 @@ def update_product(db: Session, product_id: int, data: ProductUpdate) -> Product
 def delete_product(db: Session, product_id: int) -> None:
     product = get_product(db, product_id)
     db.delete(product)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError as exc:
+        # Product is referenced by one or more order line items (FK constraint).
+        db.rollback()
+        raise ConflictError(
+            "Cannot delete this product because it appears in existing orders."
+        ) from exc

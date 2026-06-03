@@ -1,4 +1,5 @@
 """Business logic for customers."""
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.core.errors import ConflictError, NotFoundError
@@ -44,4 +45,12 @@ def update_customer(db: Session, customer_id: int, data: CustomerUpdate) -> Cust
 def delete_customer(db: Session, customer_id: int) -> None:
     customer = get_customer(db, customer_id)
     db.delete(customer)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError as exc:
+        # Customer is referenced by one or more orders (FK constraint).
+        db.rollback()
+        raise ConflictError(
+            "Cannot delete this customer because they have existing orders. "
+            "Cancel or remove their orders first."
+        ) from exc

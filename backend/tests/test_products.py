@@ -53,3 +53,17 @@ def test_get_update_delete_product(client):
 def test_negative_stock_rejected(client):
     resp = _make_product(client, stock_quantity=-5)
     assert resp.status_code == 422
+
+
+def test_cannot_delete_product_in_an_order(client):
+    pid = _make_product(client).json()["id"]
+    cid = client.post(
+        "/customers", json={"name": "Buyer", "email": "buyer@example.com"}
+    ).json()["id"]
+    client.post("/orders", json={"customer_id": cid, "items": [{"product_id": pid, "quantity": 1}]})
+
+    resp = client.delete(f"/products/{pid}")
+    assert resp.status_code == 409
+    assert "order" in resp.json()["detail"].lower()
+    # Product still exists (clean rejection, not a 500).
+    assert client.get(f"/products/{pid}").status_code == 200
