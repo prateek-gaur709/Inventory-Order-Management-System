@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+*.db
+
+# Node / frontend
+node_modules/
+dist/
+
+# Env files (never commit real secrets)
+.env
+.env.local
+*.env
+!.env.example
+!**/.env.example
+
+# Editor / OS / local tooling
+.DS_Store
+*.log   
